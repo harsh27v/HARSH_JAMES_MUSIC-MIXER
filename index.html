@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width">
+    <title>Music Mixer</title>
+    <link href="css/grid.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="grid-con">
+    <h1 class="col-span-full" id="music">Music Mixer</h1>
+    <p class="col-span-full description">Place instruments below to make music</p>
+</header>
+
+<section class="grid-con" id="drop-zone-con">
+    <h2 class="hidden">Characters</h2>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="target-zone" data-character="brook">
+            <p class="character-name">Brook</p>
+            <img src="images/Brook_Guitar.jpg" class="character-img hidden" alt="Brook playing guitar">
+        </div>
+    </div>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="target-zone" data-character="dai">
+            <p class="character-name">Dai Miyamoto</p>
+            <img src="images/Dai_Miyamoto_Saxophone.jpg" class="character-img hidden" alt="Dai playing saxophone">
+        </div>
+    </div>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="target-zone" data-character="kosei">
+            <p class="character-name">Kousei Arima</p>
+            <img src="images/Kōsei_Arima_Piano.png" class="character-img hidden" alt="Kousei playing piano">
+        </div>
+    </div>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="target-zone" data-character="nijika">
+            <p class="character-name">Nijika</p>
+            <img src="images/nijika_Drum.jpg" class="character-img hidden" alt="Nijika playing drums">
+        </div>
+    </div>
+
+</section>
+
+<section class="grid-con" id="drag-con">
+    <h2 class="hidden">Instruments</h2>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="drag-item" draggable="true" data-instrument="guitar">
+            <img src="images/gauitar.png" alt="Guitar">
+        </div>
+    </div>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="drag-item" draggable="true" data-instrument="sax">
+            <img src="images/saxophone.png" alt="Saxophone">
+        </div>
+    </div>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="drag-item" draggable="true" data-instrument="piano">
+            <img src="images/piano.png" alt="Piano">
+        </div>
+    </div>
+
+    <div class="col-span-1 m-col-span-3 l-col-span-3">
+        <div class="drag-item" draggable="true" data-instrument="drums">
+            <img src="images/drums.png" alt="Drums">
+        </div>
+    </div>
+
+</section>
+
+<section class="controls">
+    <h2 class="hidden">Controls</h2>
+
+    <div class="control">
+        <img src="images/play-button-large_1.svg" id="play-all" class="control-icon" alt="Play">
+        <p>Play</p>
+    </div>
+
+    <div class="control">
+        <img src="images/pause-button-large.svg" id="pause-all" class="control-icon" alt="Pause">
+        <p>Pause</p>
+    </div>
+
+    <div class="control">
+        <img src="images/stop-button-large.svg" id="stop-all" class="control-icon" alt="Stop">
+        <p>Stop</p>
+    </div>
+
+    <div class="control">
+        <img src="images/reset-button-large.svg" id="reset-all" class="control-icon" alt="Reset">
+        <p>Reset</p>
+    </div>
+
+    <div class="control">
+        <input id="volumeControl" type="range" min="0" max="100" step="1">
+        <p>Volume</p>
+    </div>
+
+</section>
+
+<audio id="guitar-audio" src="audio/Guitar.mp3"></audio>
+<audio id="sax-audio" src="audio/Saxophone.mp3"></audio>
+<audio id="piano-audio" src="audio/Piano.mp3"></audio>
+<audio id="drums-audio" src="audio/Drums.mp3"></audio>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
