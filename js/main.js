@@ -2,7 +2,6 @@ console.log("JavaScript File is linked");
 
 const targetZones = document.querySelectorAll(".target-zone");
 const dragItems = document.querySelectorAll(".drag-item");
-//const audioPlayer = document.querySelector('audio');
 const playButton = document.querySelector('#play-all');
 const pauseButton = document.querySelector('#pause-all');
 const volSlider = document.querySelector('#volumeControl');
