@@ -2,140 +2,155 @@ console.log("JavaScript File is linked");
 
 const targetZones = document.querySelectorAll(".target-zone");
 const dragItems = document.querySelectorAll(".drag-item");
+
 const playButton = document.querySelector('#play-all');
 const pauseButton = document.querySelector('#pause-all');
-const volSlider = document.querySelector('#volumeControl');
 const stopButton = document.querySelector('#stop-all');
 const resetButton = document.querySelector('#reset-all');
-const dragCons = document.querySelectorAll("#drag-con>div");
+const volSlider = document.querySelector('#volumeControl');
 
 const guitarAudio = document.querySelector("#guitar-audio");
 const saxAudio = document.querySelector("#sax-audio");
 const pianoAudio = document.querySelector("#piano-audio");
 const drumsAudio = document.querySelector("#drums-audio");
 
-let currentDraggedElement = null;
+let draggedItem = null;
 let activeInstruments = [];
 
-targetZones.forEach(zone => {
-  zone.dataset.filled = "false";
+const originalParents = [];
+dragItems.forEach((item, i) => {
+  originalParents[i] = item.parentElement;
 });
 
-function dragStart() {
-  currentDraggedElement = this;
-}
+[guitarAudio, saxAudio, pianoAudio, drumsAudio].forEach(audio => {
+  if (audio) audio.volume = 0.5;
+});
 
-function dragOver(e) {
-  e.preventDefault();
-}
+dragItems.forEach(item => {
+  item.addEventListener("dragstart", function () {
+    draggedItem = this;
+    console.log("Dragging", this.dataset.instrument);
+  });
+});
 
-function drop(e) {
-  e.preventDefault();
+targetZones.forEach(zone => {
 
-  if (!currentDraggedElement) return;
+  zone.addEventListener("dragover", e => {
+    e.preventDefault();
+  });
 
-  let zoneInstrument = this.dataset.instrument;
-  let draggedInstrument = currentDraggedElement.dataset.instrument;
-  let img = this.querySelector(".character-img");
+  zone.addEventListener("drop", function (e) {
+    e.preventDefault();
 
-  if (this.dataset.filled === "true") return;
+    if (!draggedItem) return;
 
-  if (zoneInstrument !== draggedInstrument) {
-    console.log("Wrong match");
-    return;
-  }
+    const zoneInstrument = this.dataset.instrument;
+    const draggedInstrument = draggedItem.dataset.instrument;
 
-  this.appendChild(currentDraggedElement);
-  img.classList.remove("hidden");
+    if (this.dataset.filled === "true") return;
 
-  currentDraggedElement.classList.add("hidden");
+    if (zoneInstrument !== draggedInstrument) {
+      console.log("Wrong match");
+      return;
+    }
 
-  this.dataset.filled = "true";
+    this.appendChild(draggedItem);
+    this.querySelector(".character-img").classList.remove("hidden");
 
-  if (!activeInstruments.includes(draggedInstrument)) {
-    activeInstruments.push(draggedInstrument);
-  }
+    draggedItem.classList.add("hidden");
 
-  currentDraggedElement = null;
-}
+    this.dataset.filled = "true";
+
+    if (!activeInstruments.includes(draggedInstrument)) {
+      activeInstruments.push(draggedInstrument);
+    }
+
+    console.log("Placed", draggedInstrument);
+
+    draggedItem = null;
+  });
+});
 
 function playAudio() {
+  console.log("Play clicked");
+
   activeInstruments.forEach(inst => {
+    let audio;
 
-    if (inst === "guitar") {
-      guitarAudio.currentTime = 0;
-      guitarAudio.play();
+    if (inst === "guitar") audio = guitarAudio;
+    if (inst === "sax") audio = saxAudio;
+    if (inst === "piano") audio = pianoAudio;
+    if (inst === "drums") audio = drumsAudio;
+
+    if (audio) {
+      audio.currentTime = 0;
+
+      let playPromise = audio.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log(inst, "playing");
+          })
+          .catch(err => {
+            console.log(inst, "play error", err);
+          });
+      }
     }
-
-    if (inst === "sax") {
-      saxAudio.currentTime = 0;
-      saxAudio.play();
-    }
-
-    if (inst === "piano") {
-      pianoAudio.currentTime = 0;
-      pianoAudio.play();
-    }
-
-    if (inst === "drums") {
-      drumsAudio.currentTime = 0;
-      drumsAudio.play();
-    }
-
   });
 }
 
 function pauseAudio() {
-  guitarAudio.pause();
-  saxAudio.pause();
-  pianoAudio.pause();
-  drumsAudio.pause();
+  console.log("Pause clicked");
+
+  [guitarAudio, saxAudio, pianoAudio, drumsAudio].forEach(a => {
+    if (a) a.pause();
+  });
 }
 
-function restartAudio() {
-  [guitarAudio, saxAudio, pianoAudio, drumsAudio].forEach(audio => {
-    audio.pause();
-    audio.currentTime = 0;
+function stopAudio() {
+  console.log("Stop clicked");
+
+  [guitarAudio, saxAudio, pianoAudio, drumsAudio].forEach(a => {
+    if (a) {
+      a.pause();
+      a.currentTime = 0;
+    }
   });
 }
 
 function setVolume() {
-  let value = this.value / 100;
+  const v = this.value / 100;
+  console.log("Volume:", v);
 
-  [guitarAudio, saxAudio, pianoAudio, drumsAudio].forEach(audio => {
-    audio.volume = value;
+  [guitarAudio, saxAudio, pianoAudio, drumsAudio].forEach(a => {
+    if (a) a.volume = v;
   });
 }
 
 function resetMixer() {
+  console.log("Reset clicked");
 
-  restartAudio();
+  stopAudio();
 
   targetZones.forEach(zone => {
-    let img = zone.querySelector(".character-img");
-    img.classList.add("hidden");
     zone.dataset.filled = "false";
+
+    const img = zone.querySelector(".character-img");
+    if (img) img.classList.add("hidden");
   });
 
-  dragItems.forEach((dragItem, index) => {
-    dragCons[index].appendChild(dragItem);
-    dragItem.classList.remove("hidden");
+  dragItems.forEach((item, i) => {
+    originalParents[i].appendChild(item);
+    item.classList.remove("hidden");
   });
 
   activeInstruments = [];
+  draggedItem = null;
 }
 
-dragItems.forEach(item => {
-  item.addEventListener('dragstart', dragStart);
-});
-
-targetZones.forEach(zone => {
-  zone.addEventListener('dragover', dragOver);
-  zone.addEventListener('drop', drop);
-});
-
-playButton.addEventListener("click", playAudio);
-pauseButton.addEventListener("click", pauseAudio);
-stopButton.addEventListener("click", restartAudio);
-volSlider.addEventListener("input", setVolume);
-resetButton.addEventListener("click", resetMixer);
+if (playButton) playButton.addEventListener("click", playAudio);
+if (pauseButton) pauseButton.addEventListener("click", pauseAudio);
+if (stopButton) stopButton.addEventListener("click", stopAudio);
+if (resetButton) resetButton.addEventListener("click", resetMixer);
+if (volSlider) volSlider.addEventListener("input", setVolume);
