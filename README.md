@@ -24,3 +24,9 @@ Mix different instruments and create your own sound!
 
 ## History
 TODO: Write history
+
+## Credits
+Harsh Vasita & James Kuebler
+
+## License
+MIT License
