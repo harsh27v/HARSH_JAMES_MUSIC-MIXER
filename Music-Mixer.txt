@@ -1,0 +1,97 @@
+Music Mixer Project – Explanation
+Overview
+
+This JavaScript file controls the main functionality of the Music Mixer project. It handles drag-and-drop interactions, audio playback, volume control, and resetting the mixer.
+
+1. Selecting Elements from HTML
+
+First, I selected all the required elements from the HTML using querySelector and querySelectorAll.
+
+.target-zone → the drop areas for instruments
+.drag-item → the draggable instrument icons
+Buttons → play, pause, stop, reset
+#volumeControl → volume slider
+Audio elements → guitar, sax, piano, drums
+
+This allows JavaScript to control and interact with these elements.
+
+2. Variables Used
+draggedItem → stores the item currently being dragged
+activeInstruments → keeps track of instruments placed in zones
+originalParents → stores original positions of draggable items for reset
+
+These variables help manage the state of the application.
+
+3. Setting Default Volume
+
+When the page loads, all audio is loaded and set to volume 0.5 (50%)
+
+4. Drag and Drop Functionality
+Drag Start
+
+When a user starts dragging an instrument:
+
+The selected item is stored in draggedItem
+A message is logged in the console
+Drag Over
+e.preventDefault() is used to allow dropping
+Drop Event
+
+When an item is dropped into a zone:
+
+It checks if an item is being dragged
+It compares the instrument type using dataset.instrument
+If the instrument does not match the zone → nothing happens
+If it matches:
+The item is added to the zone
+The character image becomes visible
+The dragged item is hidden
+The zone is marked as filled
+The instrument is added to activeInstruments
+
+This ensures correct placement of instruments.
+
+5. Audio Control Functions
+playAudio()
+Loops through all active instruments
+Finds the correct audio element
+Resets audio to start (currentTime = 0)
+Plays the audio
+Handles any playback errors
+pauseAudio()
+Pauses all audio elements
+stopAudio()
+Pauses all audio
+Resets playback time to 0
+6. Volume Control
+setVolume()
+Gets slider value (0–100)
+Converts it to range (0–1)
+Applies volume to all audio elements
+7. Reset Functionality
+resetMixer()
+Stops all audio
+Clears all filled zones
+Hides character images
+Moves all draggable items back to original positions
+Makes items visible again
+Clears activeInstruments
+Resets draggedItem
+
+This returns the mixer to its initial state.
+
+8. Event Listeners
+
+Event listeners are added to buttons:
+
+Play → playAudio()
+Pause → pauseAudio()
+Stop → stopAudio()
+Reset → resetMixer()
+Volume slider → setVolume()
+
+These allow user interaction with the mixer.
+
+Conclusion
+
+This JavaScript file links the application's visual and audio behavior to user inputs (dragging, button clicks, volume adjustments). It guarantees that only properly positioned instruments function and makes it simple for users to manage playback.
